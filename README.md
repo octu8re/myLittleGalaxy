@@ -1,3 +1,4 @@
+<pre>
                    _       _  _    _    _         _____         _                     
                   | |     (_)| |  | |  | |       / ____|       | |                    
  _ __ ___   _   _ | |      _ | |_ | |_ | |  ___ | |  __   __ _ | |  __ _ __  __ _   _ 
@@ -7,6 +8,6 @@
              __/ |                                                               __/ |
             |___/                                                               |___/ 
 by ChrisVelez
-
+</pre>
 Welcome to myLittleGalaxy, a small celullar automaton project I started building
 with the help of ChatGPT.
