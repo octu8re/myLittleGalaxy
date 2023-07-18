@@ -2,17 +2,21 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Generative Art</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <title>myLittleGalaxy | by Christian Vélez</title>
     <style>
       body {
         margin: 0;
         padding: 0;
-        background-color: black;
-        font-family:'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+        background-color: #181818;
+        font-family: 'DotGothic16', sans-serif;
       }
 
       a {
           color: aqua;
+          text-decoration: none;
       }
 
       canvas {
@@ -35,6 +39,8 @@
         font-size: 14px;
         transition: opacity 0.3s;
         opacity: 1;
+        background: rgb(0, 0, 0, .5);
+        width:25%;
       }
 
       #controls.hidden {
@@ -86,14 +92,32 @@
         color: white;
         border: 1px solid #333;
       }
+      @media screen and (min-width: 390px) {
+        #controls {
+          font-size: 1.5em;
+          width: 40%;
+        }
+
+        button {
+          font-family: 'DotGothic16', 'sans-serif';
+          font-size:1.5em;
+        }
+      }
+      @media screen and (min-width: 600px) {
+        #controls {
+          font-size: 1em;
+          width:25%;
+        }
+      }
     </style>
   </head>
   <body>
     <canvas id="canvas1" style="opacity:80%;"></canvas>
     <canvas id="canvas2"></canvas>
     <div id="controls">
+      <h1>myLittleGalaxy</h1>
         <label for="brushSize">Brush Size:</label>
-        <input type="range" id="brushSize" min="1" max="10" step="1" value="1">
+        <input type="range" id="brushSize" min="0" max="10" step="1" value="0">
         <label for="colorPalette">Color Palette:</label>
         <select id="colorPalette">
             <option value="random">Random</option>
@@ -101,15 +125,18 @@
             <option value="palette2">YMC</option>
             <option value="palette3">Retro</option>
             <option value="palette4">Warm</option>
+            <option value="palette5">Mono</option>
+            <option value="palette6">Pastel</option>
         </select>
         <button id="play">Play</button>
         <button id="pause">Pause</button>
 
         <span>Welcome to myLittleGalaxy. </br> 
-        A small <a href="https://en.wikipedia.org/wiki/Cellular_automaton" target="_blank">CA</a> project created </br> 
-        while learning to code with </br> 
-        ChatGPT that follows</br>
+        A small <a href="https://en.wikipedia.org/wiki/Cellular_automaton" target="_blank">CA</a> project created  
+        while learning to code with  
+        ChatGPT that follows
         <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank">Conway's Game of Life</a> rules.</span>
+        <p></p>
         <span style="color: yellow;">Press Play to start.<br/>
         Choose a Brush Size and </br>
         start painting. ;)</span>
@@ -124,7 +151,7 @@
         <button id="save">Save Image</button>
     </div>
     <script>
-      // canvas setup
+// canvas setup
       const canvas1 = document.getElementById("canvas1");
       const ctx1 = canvas1.getContext("2d");
       const canvas2 = document.getElementById("canvas2");
@@ -134,7 +161,7 @@
       const cellSize1 = 5;
       const cellSize2 = 15;
 
-      // grid setup
+// grid setup
       const rows1 = Math.floor(height / cellSize1);
       const cols1 = Math.floor(width / cellSize1);
       let grid1 = new Array(cols1).fill(null).map(() => new Array(rows1).fill(0));
@@ -143,24 +170,26 @@
       const cols2 = Math.floor(width / cellSize2);
       let grid2 = new Array(cols2).fill(null).map(() => new Array(rows2).fill(0));
 
-      // brush size
-      let brushSize = 1;
+// brush size
+      let brushSize = 0;
 
-      // color palettes
+// color palettes
       const colorPalettes = {
         random: null,
         palette1: ['#ff0000', '#00ff00', '#0000ff'],
         palette2: ['#ffff00', '#ff00ff', '#00ffff'],
         palette3: ['#ff9900', '#0099ff', '#99ff00'],
-        palette4: ['#6C9BF0', '#F07A7C', '#F0BB4A']
+        palette4: ['#6C9BF0', '#F07A7C', '#F0BB4A'],
+        palette5: ['#222222', '#777777', '#e9e9e9'],
+        palette6: ['#b9cefb', '#ffb8ea', '#cafde0']
       };
-      let selectedPalette = 'random';
+      let selectedPalette = 'palette4';
 
-      // animation variables
+// animation variables
         let isPlaying = false;
         let requestId;
 
-      // initialize grid with random values
+// initialize grid with random values
       for (let i = 0; i < cols1; i++) {
         for (let j = 0; j < rows1; j++) {
           grid1[i][j] = Math.floor(Math.random() * 2);
@@ -172,7 +201,7 @@
         }
       }
 
-      // draw the grid
+// draw the grid
       function draw(ctx, grid, cellSize, cols, rows) {
         ctx.clearRect(0, 0, width, height);
         for (let i = 0; i < cols; i++) {
@@ -191,7 +220,7 @@
         }
       }
 
-      // update the grid
+// update the grid
       function update(grid, cols, rows) {
         const nextGrid = new Array(cols).fill(null).map(() => new Array(rows).fill(0));
         for (let i = 1; i < cols - 1; i++) {
@@ -215,7 +244,7 @@
         return nextGrid;
       }
 
-  // animate the grid
+// animate the grid
   function animate() {
     if (isPlaying) {
       draw(ctx1, grid1, cellSize1, cols1, rows1);
@@ -227,7 +256,7 @@
   }
 
 
-      // controls setup
+// controls setup
       document.getElementById('brushSize').addEventListener('input', event => {
         brushSize = event.target.value;
       });
@@ -251,37 +280,37 @@
         }
       });
 
-      // toggle controls visibility
+// toggle controls visibility
       document.getElementById('controls-toggle').addEventListener('click', () => {
         document.getElementById('controls').classList.toggle('hidden');
       });
 
-      // handle save button click
+// handle save button click
         document.getElementById('save').addEventListener('click', () => {
 
-            // Add text
+// Add text
             ctx2.font = "25px Arial";
             ctx2.fillStyle = "#777777";
             ctx2.fillText("ChrisVélez, 2023", 5, 25);
 
-            // Create a new canvas
+// Create a new canvas
             const combinedCanvas = document.createElement('canvas');
             combinedCanvas.width = width;
             combinedCanvas.height = height;
             const combinedCtx = combinedCanvas.getContext('2d');
 
-            // Draw the content of both canvases on the new canvas
+// Draw the content of both canvases on the new canvas
             combinedCtx.drawImage(canvas1, 0, 0);
             combinedCtx.drawImage(canvas2, 0, 0);
 
-            // Save the combined canvas
+// Save the combined canvas
             const link = document.createElement('a');
             link.download = 'myLittleGalaxy.png';
             link.href = combinedCanvas.toDataURL();
             link.click();
         });
 
-        // mouse and touch events
+// mouse and touch events
         let isDrawing = false;
         canvas2.addEventListener("mousedown", function (event) {
             isDrawing = true;
@@ -309,7 +338,7 @@
             }
         });
 
-      // draw cell
+// draw cell
       function drawCell(event) {
         const x = Math.floor(event.clientX / cellSize2);
         const y = Math.floor(event.clientY / cellSize2);
