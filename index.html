@@ -15,8 +15,8 @@
       }
 
       a {
-          color: aqua;
-          text-decoration: none;
+        color: aqua;
+        text-decoration: none;
       }
 
       canvas {
@@ -26,6 +26,9 @@
         display: block;
       }
 
+      #canvas1 {
+        filter: blur(3px);   
+      }
 
       #controls {
         position: fixed;
@@ -36,7 +39,7 @@
         gap: 10px;
         z-index: 2;
         color: white;
-        font-size: 14px;
+        font-size: 2em;
         transition: opacity 0.3s;
         opacity: 1;
         background: rgb(0, 0, 0, .5);
@@ -47,6 +50,7 @@
         opacity: 0;
         pointer-events: none;
       }
+/*
       #share {
         position: fixed;
         top: 10px;
@@ -58,8 +62,8 @@
         padding: 6px 12px;
         border: none;
         cursor: pointer;
-    }
-        /*
+      }
+
       #controls-toggle {
         position: fixed;
         top: 10px;
@@ -72,47 +76,52 @@
         border: none;
         cursor: pointer;
       }
-
+*/
       #share {
         position: fixed;
         bottom: 10px;
         left: 10px;
         z-index: 2;
         color: white;
-        font-size: 14px;
       }
-*/
+
+
       button {
-          background: #000000;
-          color: white;
-          border: 1px solid #333;
-      }
-      select {
         background: #000000;
         color: white;
         border: 1px solid #333;
       }
+
+      select {
+        background: #000000;
+        color: white;
+        border: 1px solid #333;
+        font-size: 1.5em;
+        font-family: 'DotGothic16', 'sans-serif';
+      }
+
       @media screen and (min-width: 390px) {
         #controls {
-          font-size: 1.5em;
+          font-size: 1em;
           width: 40%;
         }
 
         button {
           font-family: 'DotGothic16', 'sans-serif';
-          font-size:1.5em;
+          font-size: 1.5em;
         }
       }
+
       @media screen and (min-width: 600px) {
         #controls {
-          font-size: 1em;
+          font-size: 1.4em;
           width:25%;
         }
       }
     </style>
   </head>
   <body>
-    <canvas id="canvas1" style="opacity:80%;"></canvas>
+    <canvas id="canvas1"></canvas>
     <canvas id="canvas2"></canvas>
     <div id="controls">
       <h1>myLittleGalaxy</h1>
@@ -131,7 +140,7 @@
         <button id="play">Play</button>
         <button id="pause">Pause</button>
 
-        <span>Welcome to myLittleGalaxy. </br> 
+        <span>Welcome to myLittleGalaxy.</br> 
         A small <a href="https://en.wikipedia.org/wiki/Cellular_automaton" target="_blank">CA</a> project created  
         while learning to code with  
         ChatGPT that follows
@@ -143,12 +152,12 @@
         <span>I've found this to</br>
         calm my anxiety.</span>
 
-        <span>Made by <a href="https://chrisvelez.carbonmade.com" target="_blank">Christian Vélez</a>. 2023</span>
+        <span>Made by <a href="https://chrisvelez.carbonmade.com" target="_blank">Christian Vélez</a>. </br> 2023</span>
     </div>
 
     <div id="share">
-        <button id="controls-toggle">Toggle Controls</button>
-        <button id="save">Save Image</button>
+        <button id="controls-toggle" style="color:aquamarine;">Toggle Controls</button>
+        <button id="save" style="color: #5e5e5e;">Save Image</button>
     </div>
     <script>
 // canvas setup
@@ -159,7 +168,7 @@
       const width = canvas1.width = canvas2.width = window.innerWidth;
       const height = canvas1.height = canvas2.height = window.innerHeight;
       const cellSize1 = 5;
-      const cellSize2 = 15;
+      const cellSize2 = 10;
 
 // grid setup
       const rows1 = Math.floor(height / cellSize1);
@@ -255,7 +264,6 @@
     }
   }
 
-
 // controls setup
       document.getElementById('brushSize').addEventListener('input', event => {
         brushSize = event.target.value;
@@ -288,22 +296,25 @@
 // handle save button click
         document.getElementById('save').addEventListener('click', () => {
 
-// Add text
+  // Add text
             ctx2.font = "25px Arial";
             ctx2.fillStyle = "#777777";
             ctx2.fillText("ChrisVélez, 2023", 5, 25);
 
-// Create a new canvas
+
+  // Create a new canvas
             const combinedCanvas = document.createElement('canvas');
             combinedCanvas.width = width;
             combinedCanvas.height = height;
             const combinedCtx = combinedCanvas.getContext('2d');
 
-// Draw the content of both canvases on the new canvas
+
+
+  // Draw the content of both canvases on the new canvas
             combinedCtx.drawImage(canvas1, 0, 0);
             combinedCtx.drawImage(canvas2, 0, 0);
 
-// Save the combined canvas
+  // Save the combined canvas
             const link = document.createElement('a');
             link.download = 'myLittleGalaxy.png';
             link.href = combinedCanvas.toDataURL();
@@ -339,19 +350,30 @@
         });
 
 // draw cell
-      function drawCell(event) {
-        const x = Math.floor(event.clientX / cellSize2);
-        const y = Math.floor(event.clientY / cellSize2);
-        for (let i = -brushSize; i <= brushSize; i++) {
-          for (let j = -brushSize; j <= brushSize; j++) {
-            const xi = x + i;
-            const yj = y + j;
-            if (xi >= 0 && xi < cols2 && yj >= 0 && yj < rows2) {
-              grid2[xi][yj] = 1;
-            }
-          }
-        }
+function drawCell(event) {
+  const x2 = Math.floor(event.clientX / cellSize2);
+  const y2 = Math.floor(event.clientY / cellSize2);
+  const x1 = Math.floor(event.clientX / cellSize1);
+  const y1 = Math.floor(event.clientY / cellSize1);
+
+  for (let i = -brushSize; i <= brushSize; i++) {
+    for (let j = -brushSize; j <= brushSize; j++) {
+      const xi2 = x2 + i;
+      const yj2 = y2 + j;
+      const xi1 = x1 + i;
+      const yj1 = y1 + j;
+
+      if (xi2 >= 0 && xi2 < cols2 && yj2 >= 0 && yj2 < rows2) {
+        grid2[xi2][yj2] = 1;
       }
+
+      if (xi1 >= 0 && xi1 < cols1 && yj1 >= 0 && yj1 < rows1) {
+        grid1[xi1][yj1] = 1;
+      }
+    }
+  }
+}
+
     </script>
   </body>
 </html>
