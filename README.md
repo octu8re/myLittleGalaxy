@@ -11,3 +11,6 @@ by ChrisVelez
 </pre>
 Welcome to myLittleGalaxy, a small celullar automaton project I started building
 with the help of ChatGPT.
+
+Welcome to myLittleGalaxy, a small CA project created while learning to code with 
+ChatGPT that follows Conway's Game of Life rules.
