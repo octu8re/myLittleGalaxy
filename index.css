@@ -125,7 +125,7 @@
         font-family: 'DotGothic16', 'sans-serif';
       }
 
-      @media screen and (min-width: 390px) {
+      @media screen and (min-width: 360px) {
         #controls {
           font-size: 1em;
           width: 50%;
